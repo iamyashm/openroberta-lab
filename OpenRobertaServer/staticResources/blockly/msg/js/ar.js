@@ -208,7 +208,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "اكرّر حتى";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "اكرّر طالما";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "بما ان القيمة خاطئة, نفّذ بعض الأوامر.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "بما ان القيمة صحيحة, نفّذ بعض الأوامر.";
-Blockly.Msg.DATATABLE_ACTUALIZATION = "Modification date";  // untranslated
+Blockly.Msg.DATATABLE_ACTUALIZATION = "Actualization date";  // untranslated
 Blockly.Msg.DATATABLE_CONFIGURATIONS = "configurations";  // untranslated
 Blockly.Msg.DATATABLE_CONFIGURATION_NAME = "Configuration name";  // untranslated
 Blockly.Msg.DATATABLE_CREATED_BY = "Creator";  // untranslated
@@ -575,7 +575,6 @@ Blockly.Msg.MATH_ROUND_TOOLTIP = "تقريب الى اكبر عدد صحيح أ�
 Blockly.Msg.MATH_SINGLE_HELPURL = "https://en.wikipedia.org/wiki/Square_root";
 Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE = "مطلق";
 Blockly.Msg.MATH_SINGLE_OP_ROOT = "الجذر التربيعي";
-Blockly.Msg.MATH_SINGLE_OP_SQUARE = "square";  // untranslated
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ABS = "يرجع القيمة المطلقة لرقم.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_EXP = "يرجع  e الذي هو الاس المرفوع للرقم.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_LN = "يرجع اللوغاريتم الطبيعي لرقم.";
@@ -583,7 +582,6 @@ Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10 = "يرجع لوغاريتم عدد معي
 Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG = "يرجع عدد سالب.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10 = "يرجع مضروب الرقم 10 في نفسه .";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT = "يرجع الجذر التربيعي للرقم.";
-Blockly.Msg.MATH_SINGLE_TOOLTIP_SQUARE = "Return the number multiplied by itself.";  // untranslated
 Blockly.Msg.MATH_SUBTRACTION_SYMBOL = "-";
 Blockly.Msg.MATH_TRIG_ACOS = "acos";
 Blockly.Msg.MATH_TRIG_ASIN = "asin";

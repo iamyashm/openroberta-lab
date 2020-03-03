@@ -208,7 +208,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "تکرار تا زمانی ک�
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "تکرار در حالی که";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "تا زمانی که یک مقدار ناصحیح است، چند عبارت را انجام بده.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "تا زمانی که یک مقدار صحیح است، چند عبارت را انجام بده.";
-Blockly.Msg.DATATABLE_ACTUALIZATION = "Modification date";  // untranslated
+Blockly.Msg.DATATABLE_ACTUALIZATION = "Actualization date";  // untranslated
 Blockly.Msg.DATATABLE_CONFIGURATIONS = "configurations";  // untranslated
 Blockly.Msg.DATATABLE_CONFIGURATION_NAME = "Configuration name";  // untranslated
 Blockly.Msg.DATATABLE_CREATED_BY = "Creator";  // untranslated
@@ -575,7 +575,6 @@ Blockly.Msg.MATH_ROUND_TOOLTIP = "گردکردن یک عدد به بالا یا 
 Blockly.Msg.MATH_SINGLE_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B1%DB%8C%D8%B4%D9%87_%D8%AF%D9%88%D9%85";
 Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE = "مطلق";
 Blockly.Msg.MATH_SINGLE_OP_ROOT = "ریشهٔ دوم";
-Blockly.Msg.MATH_SINGLE_OP_SQUARE = "square";  // untranslated
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ABS = "قدر مطلق یک عدد را بازمی‌گرداند.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_EXP = "بازگرداندن توان e یک عدد.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_LN = "لوگاریتم طبیعی یک عدد را باز می‌گرداند.";
@@ -583,7 +582,6 @@ Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10 = "بازگرداندن لگاریتم ب�
 Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG = "منفی‌شدهٔ یک عدد را باز می‌گرداند.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10 = "بازگرداندن توان ۱۰ یک عدد.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT = "ریشهٔ دوم یک عدد را باز می‌گرداند.";
-Blockly.Msg.MATH_SINGLE_TOOLTIP_SQUARE = "Return the number multiplied by itself.";  // untranslated
 Blockly.Msg.MATH_SUBTRACTION_SYMBOL = "-";  // untranslated
 Blockly.Msg.MATH_TRIG_ACOS = "acos";  // untranslated
 Blockly.Msg.MATH_TRIG_ASIN = "asin";  // untranslated
