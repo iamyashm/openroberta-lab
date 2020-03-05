@@ -1,0 +1,52 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="2.0" description="" tags="">
+    <instance x="75" y="-596">
+        <block type="robConf_motor" id="M.@I-gujr]QtcugO|ag(" intask="true">
+            <field name="NAME">M</field>
+            <field name="VAR">W</field>
+            <field name="CONNECTOR">1</field>
+        </block>
+    </instance>
+    <instance x="385" y="-587">
+        <block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false">
+            <field name="VAR">W</field>
+        </block>
+    </instance>
+    <instance x="71" y="-483">
+        <block type="robConf_buzzer" id="Th!waZPsRT[0BAejokqP" intask="true">
+            <field name="NAME">S</field>
+            <field name="VAR">W</field>
+        </block>
+    </instance>
+    <instance x="490" y="-492">
+        <block type="robConf_key" id="5" intask="true">
+            <field name="NAME">T</field>
+            <field name="VAR">W</field>
+        </block>
+    </instance>
+    <instance x="69" y="-402">
+        <block type="robConf_led" id="VYP;C1|+cOB=);(DKsdt" intask="true">
+            <field name="NAME">L</field>
+            <field name="VAR">W</field>
+        </block>
+    </instance>
+    <instance x="342" y="-411">
+        <block type="robConf_infrared" id="38U8).p[OwR#0]xu|uSO" intask="true">
+            <field name="NAME">I</field>
+            <field name="VAR">W</field>
+            <field name="CONNECTOR">1</field>
+        </block>
+    </instance>
+    <instance x="513" y="-399">
+        <block type="robConf_key" id="N!]OL74OE4Y+)GA.H#X?" intask="true">
+            <field name="NAME">T2</field>
+            <field name="VAR">W</field>
+        </block>
+    </instance>
+    <instance x="294" y="-301">
+        <block type="robConf_gyro" id=":UTX?ibxj4:4wnme?3zB" intask="true">
+            <field name="NAME">N</field>
+            <field name="VAR">W</field>
+            <field name="CONNECTOR">1</field>
+        </block>
+    </instance>
+</block_set>

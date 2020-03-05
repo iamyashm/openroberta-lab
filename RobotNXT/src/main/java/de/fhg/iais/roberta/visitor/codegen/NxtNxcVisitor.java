@@ -1197,9 +1197,9 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("#define WHEELDIAMETER ").append(this.brickConfiguration.getWheelDiameterCM());
+        this.sb.append("#define WHEELDIAMETER ").append(this.brickConfiguration.getWheelDiameter());
         nlIndent();
-        this.sb.append("#define TRACKWIDTH ").append(this.brickConfiguration.getTrackWidthCM());
+        this.sb.append("#define TRACKWIDTH ").append(this.brickConfiguration.getTrackWidth());
         nlIndent();
         this.sb.append("#define MAXLINES 8");
         nlIndent();

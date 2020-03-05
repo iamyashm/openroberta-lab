@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.util.test;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import org.custommonkey.xmlunit.Diff;
@@ -10,6 +11,7 @@ import org.xml.sax.SAXException;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -60,15 +62,19 @@ public class UnitTestHelper {
         String program = programParts[1];
         String[] configurationParts = parts[1].split("</config>");
         String configuration = configurationParts[0];
-        return setupWithConfigurationAndProgramXML(factory, program, configuration);
+        return setupWithConfigAndProgramXML(factory, program, configuration);
     }
 
-    public static Project.Builder setupWithConfigurationAndProgramXML(IRobotFactory factory, String programXmlAsString, String configurationXmlAsString) {
+    public static Project.Builder setupWithConfigAndProgramXML(IRobotFactory factory, String programXmlAsString, String configurationXmlAsString) {
         return new Project.Builder().setConfigurationXml(configurationXmlAsString).setProgramXml(programXmlAsString).setFactory(factory);
     }
 
     public static Project.Builder setupWithProgramXML(IRobotFactory factory, String programXmlAsString) {
         return new Project.Builder().setProgramXml(programXmlAsString).setFactory(factory).setProgramName("Test");
+    }
+
+    public static Project.Builder setupWithConfigXML(IRobotFactory factory, String configXmlAsString) {
+        return new Project.Builder().setConfigurationXml(configXmlAsString).setFactory(factory).setProgramName("Test");
     }
 
     public static void checkProgramReverseTransformation(IRobotFactory factory, String programBlocklyXmlFilename) throws SAXException, IOException {
@@ -81,14 +87,38 @@ public class UnitTestHelper {
         Assert.assertTrue(diff.identical());
     }
 
+    public static void checkConfigReverseTransformation(IRobotFactory factory, String configBlocklyXmlFilename) throws SAXException, IOException {
+        String configXml = Util.readResourceContent(configBlocklyXmlFilename);
+        Project.Builder builder = setupWithConfigXML(factory, configXml);
+        Project project = builder.build();
+        String annotatedConfigXml = project.getAnnotatedConfigurationAsXml();
+        XMLUnit.setIgnoreWhitespace(true);
+        Diff diff = XMLUnit.compareXML(configXml, annotatedConfigXml);
+        Assert.assertTrue(diff.identical());
+    }
+
     public static void checkProgramAstEquality(IRobotFactory factory, String expectedAst, String programBlocklyXmlFilename) {
         String generatedAst = getProgramAst(factory, programBlocklyXmlFilename).toString();
         generatedAst = "BlockAST [project=" + generatedAst + "]";
         Assert.assertEquals(expectedAst.replaceAll("\\s+", ""), generatedAst.replaceAll("\\s+", ""));
     }
 
+    public static void checkConfigAstEquality(IRobotFactory factory, String expectedAst, String configBlocklyXmlFilename) {
+        String generatedAst = getConfigAst(factory, configBlocklyXmlFilename).toString();
+        generatedAst = "BlockAST [project=" + generatedAst + "]";
+        Assert.assertEquals(expectedAst.replaceAll("\\s+", ""), generatedAst.replaceAll("\\s+", ""));
+    }
+
     public static Phrase<Void> getAstOfFirstBlock(IRobotFactory factory, String programBlocklyXmlFilename) {
         return getProgramAst(factory, programBlocklyXmlFilename).get(0).get(1);
+    }
+
+    // TODO merge this with "getAstOfFirstBlock" - would require generifying the projects' program ast
+    public static <V> Phrase<V> getGenericAstOfFirstBlock(IRobotFactory factory, String pathToProgramXml) throws Exception {
+        BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
+        Jaxb2ProgramAst<V> transformer = new Jaxb2ProgramAst<>(factory);
+        List<List<Phrase<V>>> tree = transformer.blocks2Ast(project).getTree();
+        return tree.get(0).get(1);
     }
 
     public static List<List<Phrase<Void>>> getProgramAst(IRobotFactory factory, String programBlocklyXmlFilename) {
@@ -98,13 +128,11 @@ public class UnitTestHelper {
         return project.getProgramAst().getTree();
     }
 
-    // TODO merge this with the method above
-    public static <V> Phrase<V> generateAst(IRobotFactory factory, String pathToProgramXml) throws Exception {
-        BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        Jaxb2ProgramAst<V> transformer = new Jaxb2ProgramAst<>(factory);
-        transformer.transform(project);
-        List<List<Phrase<V>>> tree = transformer.getTree();
-        return tree.get(0).get(1);
+    public static Collection<ConfigurationComponent> getConfigAst(IRobotFactory factory, String configBlocklyXmlFilename) {
+        String configXml = Util.readResourceContent(configBlocklyXmlFilename);
+        Project.Builder builder = setupWithConfigXML(factory, configXml);
+        Project project = builder.build();
+        return project.getConfigurationAst().getConfigurationComponents().values();
     }
 
     public static void checkGeneratedSourceEqualityWithExportXml(IRobotFactory factory, String expectedSourceFilename, String exportedXmlFilename) {
@@ -137,7 +165,7 @@ public class UnitTestHelper {
         String configurationXmlFilename) {
         String programXml = Util.readResourceContent(programXmlFilename);
         String configurationXml = Util.readResourceContent(configurationXmlFilename);
-        Project.Builder builder = setupWithConfigurationAndProgramXML(factory, programXml, configurationXml);
+        Project.Builder builder = setupWithConfigAndProgramXML(factory, programXml, configurationXml);
         builder.setSSID("mySSID");
         builder.setPassword("myPassw0rd");
         checkGeneratedSourceEquality(factory, Util.readResourceContent(expectedSourceFilename), builder.build());

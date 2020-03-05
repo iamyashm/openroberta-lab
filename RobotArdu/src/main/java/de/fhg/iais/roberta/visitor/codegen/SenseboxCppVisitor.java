@@ -120,12 +120,12 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         this.sb.append("#define _ARDUINO_STL_NOT_NEEDED\n");
         this.sb.append("#include <NEPODefs.h>\n");
         this.sb.append("#include \"SenseBoxMCU.h\"");
-        if ( this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_SDCARD) != null ) {
+        if ( this.configuration.getConfigurationComponentByType(SC.SENSEBOX_SDCARD) != null ) {
             this.sb.append("\n#include <SPI.h>");
             this.sb.append("\n#include <SD.h>");
         }
 
-        if ( this.configuration.getConfigurationComponentbyType(SC.LCDI2C) != null ) {
+        if ( this.configuration.getConfigurationComponentByType(SC.LCDI2C) != null ) {
             this.sb.append("\n#include <SPI.h>");
             this.sb.append("\n#include <Wire.h>");
             this.sb.append("\n#include <Adafruit_GFX.h>");
@@ -186,7 +186,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
-        ConfigurationComponent cc = this.configuration.getConfigurationComponentbyType(SC.LCDI2C);
+        ConfigurationComponent cc = this.configuration.getConfigurationComponentByType(SC.LCDI2C);
         String portName = null;
         if ( cc != null ) {
             portName = cc.getUserDefinedPortName();
@@ -529,7 +529,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 nlIndent();
             }
         } else if ( sendDataAction.getDestination().equals("SDCARD") ) {
-            ConfigurationComponent cc = this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_SDCARD);
+            ConfigurationComponent cc = this.configuration.getConfigurationComponentByType(SC.SENSEBOX_SDCARD);
             if ( cc == null ) {
                 return null;
             }
@@ -644,7 +644,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.COMPASS:
                     for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
                         if ( usedSensor.getType().equals(SC.COMPASS) ) {
-                            bmx55PortName = this.configuration.getConfigurationComponentbyType(SC.ACCELEROMETER).getUserDefinedPortName();
+                            bmx55PortName = this.configuration.getConfigurationComponentByType(SC.ACCELEROMETER).getUserDefinedPortName();
                             this.sb.append("_bmx055_").append(bmx55PortName).append(".beginMagn();");
                             nlIndent();
                             break;
@@ -654,7 +654,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.GYRO:
                     for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
                         if ( usedSensor.getType().equals(SC.GYRO) ) {
-                            bmx55PortName = this.configuration.getConfigurationComponentbyType(SC.ACCELEROMETER).getUserDefinedPortName();
+                            bmx55PortName = this.configuration.getConfigurationComponentByType(SC.ACCELEROMETER).getUserDefinedPortName();
                             this.sb.append("_bmx055_").append(bmx55PortName).append(".beginGyro();");
                             nlIndent();
                             break;
@@ -864,7 +864,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.WIRELESS:
                     this.sb.append("Bee* _bee_ = new Bee();");
                     this.nlIndent();
-                    ConfigurationComponent sensebox = this.configuration.getConfigurationComponentbyType(SC.SENSEBOX);
+                    ConfigurationComponent sensebox = this.configuration.getConfigurationComponentByType(SC.SENSEBOX);
                     if ( sensebox != null ) {
                         for ( UsedActor usedActor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
                             if ( usedActor.getType().equals(SC.SEND_DATA) ) {
@@ -966,7 +966,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
             if ( cc.getComponentType().equals(SC.LCDI2C) ) {
                 String blockName = cc.getUserDefinedPortName();
-                ConfigurationComponent displayConfigurationComponent = this.configuration.getConfigurationComponentbyType(SC.LCDI2C);
+                ConfigurationComponent displayConfigurationComponent = this.configuration.getConfigurationComponentByType(SC.LCDI2C);
                 String displayName;
                 if ( displayConfigurationComponent != null ) {
                     displayName = displayConfigurationComponent.getUserDefinedPortName();

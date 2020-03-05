@@ -1,8 +1,9 @@
 package de.fhg.iais.roberta.components.vorwerk;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Lists;
@@ -12,11 +13,7 @@ import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.SC;
 
 public class VorwerkConfiguration extends ConfigurationAst {
-    private static ArrayList<ConfigurationComponent> components;
-    private final String ipAddress;
-    private final String portNumber;
-    private final String userName;
-    private final String password;
+    private static List<ConfigurationComponent> components;
     static {
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorA = new ConfigurationComponent(SC.LARGE, true, "left", "LEFT", motorAproperties);
@@ -38,9 +35,8 @@ public class VorwerkConfiguration extends ConfigurationAst {
         ConfigurationComponent z = new ConfigurationComponent(SC.ACCELEROMETER, false, "z", "Z", Collections.emptyMap());
         ConfigurationComponent strength = new ConfigurationComponent(SC.ACCELEROMETER, false, "strength", "STRENGTH", Collections.emptyMap());
 
-        components =
-            Lists
-                .newArrayList(
+        components = Lists
+            .newArrayList(
                     motorA,
                     motorB,
                     leftUltrasonic,
@@ -56,29 +52,19 @@ public class VorwerkConfiguration extends ConfigurationAst {
                     rightDropoff);
     }
 
-    public VorwerkConfiguration(String ipAddress, String portNumber, String userName, String password) {
-        super(components, 0.0f, 0.0f);
-
-        this.ipAddress = ipAddress;
-        this.portNumber = portNumber;
-        this.userName = userName;
-        this.password = password;
-    }
-
-    public String getIpAddress() {
-        return this.ipAddress;
-    }
-
-    public String getPortNumber() {
-        return this.portNumber;
-    }
-
-    public String getUserName() {
-        return this.userName;
-    }
-
-    public String getPassword() {
-        return this.password;
+    private VorwerkConfiguration(
+        Collection<ConfigurationComponent> configurationComponents,
+        String robottype,
+        String xmlversion,
+        String description,
+        String tags,
+        float wheelDiameter,
+        float trackWidth,
+        String ipAddress,
+        String portNumber,
+        String userName,
+        String password) {
+        super(components, robottype, xmlversion, description, tags, wheelDiameter, trackWidth, ipAddress, portNumber, userName, password);
     }
 
     private static Map<String, String> createMap(String... args) {
@@ -88,41 +74,4 @@ public class VorwerkConfiguration extends ConfigurationAst {
         }
         return m;
     }
-
-    /**
-     * This class is a builder of {@link ConfigurationAst}
-     */
-    public static class Builder extends ConfigurationAst.Builder {
-        private String ipAddress;
-        private String portNumber;
-        private String userName;
-        private String password;
-
-        public Builder setIpAddres(String ipAddress) {
-            this.ipAddress = ipAddress;
-            return this;
-        }
-
-        public Builder setPortNumber(String portNumber) {
-            this.portNumber = portNumber;
-            return this;
-        }
-
-        public Builder setUserName(String userName) {
-            this.userName = userName;
-            return this;
-        }
-
-        public Builder setPassword(String password) {
-            this.password = password;
-            return this;
-        }
-
-        @Override
-        public VorwerkConfiguration build() {
-            return new VorwerkConfiguration(this.ipAddress, this.portNumber, this.userName, this.password);
-        }
-
-    }
-
 }

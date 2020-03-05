@@ -3,12 +3,10 @@ package de.fhg.iais.roberta.components;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -20,22 +18,48 @@ import de.fhg.iais.roberta.visitor.IVisitor;
  * The {@link ConfigurationAst} contains four sensor ports and four actor ports. Client cannot connect more than that.
  */
 public class ConfigurationAst {
-    protected final Map<String, ConfigurationComponent> configurationComponents;
+    private final LinkedHashMap<String, ConfigurationComponent> configurationComponents;
 
     private String robotName;
-    private final float wheelDiameterCM;
-    private final float trackWidthCM;
+
     private final List<String> componentTypes;
 
-    private String ipAddress;
-    private String portNumber;
-    private String userName;
-    private String password;
+    private final String robotType;
+    private final String xmlVersion;
+    private final String description;
+    private final String tags;
 
-    public ConfigurationAst(Collection<ConfigurationComponent> configurationComponents, float wheelDiameterCM, float trackWidthCM) {
+    private final float wheelDiameter;
+    private final float trackWidth;
+
+    private final String ipAddress;
+    private final String portNumber;
+    private final String userName;
+    private final String password;
+
+    protected ConfigurationAst(
+        Collection<ConfigurationComponent> configurationComponents,
+        String robotType,
+        String xmlVersion,
+        String description,
+        String tags,
+        float wheelDiameter,
+        float trackWidth,
+        String ipAddress,
+        String portNumber,
+        String userName,
+        String password) {
         this.configurationComponents = buildConfigurationComponentMap(configurationComponents);
-        this.wheelDiameterCM = wheelDiameterCM;
-        this.trackWidthCM = trackWidthCM;
+        this.robotType = robotType;
+        this.xmlVersion = xmlVersion;
+        this.description = description;
+        this.tags = tags;
+        this.wheelDiameter = wheelDiameter;
+        this.trackWidth = trackWidth;
+        this.ipAddress = ipAddress;
+        this.portNumber = portNumber;
+        this.userName = userName;
+        this.password = password;
         this.componentTypes = new ArrayList<>();
         for ( ConfigurationComponent configurationComponent : this.configurationComponents.values() ) {
             this.componentTypes.add(configurationComponent.getComponentType());
@@ -56,23 +80,65 @@ public class ConfigurationAst {
         this.robotName = robotName;
     }
 
+    public String getRobotType() {
+        return this.robotType;
+    }
+
+    public String getXmlVersion() {
+        return this.xmlVersion;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public String getTags() {
+        return this.tags;
+    }
+
+    /**
+     * @return the robot's wheel diameter in cm
+     */
+    public float getWheelDiameter() {
+        return this.wheelDiameter;
+    }
+
+    /**
+     * @return the robot's track width in cm
+     */
+    public float getTrackWidth() {
+        return this.trackWidth;
+    }
+
+    public String getIpAddress() {
+        return this.ipAddress;
+    }
+
+    public String getPortNumber() {
+        return this.portNumber;
+    }
+
+    public String getUserName() {
+        return this.userName;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
     public HashMap<String, ConfigurationComponent> getConfigurationComponents() {
-        return (HashMap<String, ConfigurationComponent>) this.configurationComponents;
+        return this.configurationComponents;
     }
 
     public boolean isComponentTypePresent(String componentType) {
-        if ( this.componentTypes.contains(componentType) ) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.componentTypes.contains(componentType);
     }
 
     public Collection<ConfigurationComponent> getConfigurationComponentsValues() {
         return this.configurationComponents.values();
     }
 
-    public ConfigurationComponent getConfigurationComponentbyType(String type) {
+    public ConfigurationComponent getConfigurationComponentByType(String type) {
         for ( ConfigurationComponent cc : this.configurationComponents.values() ) {
             if ( cc.getComponentType().equals(type) ) {
                 return cc;
@@ -82,11 +148,11 @@ public class ConfigurationAst {
     }
 
     public Collection<ConfigurationComponent> getActors() {
-        return this.configurationComponents.values().stream().filter(item -> item.isActor()).collect(Collectors.toList());
+        return this.configurationComponents.values().stream().filter(ConfigurationComponent::isActor).collect(Collectors.toList());
     }
 
     public Collection<ConfigurationComponent> getSensors() {
-        return this.configurationComponents.values().stream().filter(item -> item.isSensor()).collect(Collectors.toList());
+        return this.configurationComponents.values().stream().filter(ConfigurationComponent::isSensor).collect(Collectors.toList());
     }
 
     public ConfigurationComponent getConfigurationComponent(String userDefinedName) {
@@ -96,21 +162,7 @@ public class ConfigurationAst {
     }
 
     public ConfigurationComponent optConfigurationComponent(String userDefinedName) {
-        ConfigurationComponent configurationComponent = this.configurationComponents.get(userDefinedName);
-        return configurationComponent;
-    }
-
-    public String getComponentTypeOfUserDefinedName(String userDefinedName) {
-        ConfigurationComponent configurationComponent = getConfigurationComponent(userDefinedName);
-        return configurationComponent.getComponentType();
-    }
-
-    public float getWheelDiameterCM() {
-        return this.wheelDiameterCM;
-    }
-
-    public float getTrackWidthCM() {
-        return this.trackWidthCM;
+        return this.configurationComponents.get(userDefinedName);
     }
 
     public String getFirstMotorPort(String side) {
@@ -144,45 +196,12 @@ public class ConfigurationAst {
         }
     }
 
-    private Map<String, ConfigurationComponent> buildConfigurationComponentMap(Collection<ConfigurationComponent> configurationComponents) {
-        Map<String, ConfigurationComponent> map = new HashMap<>();
+    private LinkedHashMap<String, ConfigurationComponent> buildConfigurationComponentMap(Collection<ConfigurationComponent> configurationComponents) {
+        LinkedHashMap<String, ConfigurationComponent> map = new LinkedHashMap<>();
         for ( ConfigurationComponent configurationComponent : configurationComponents ) {
             map.put(configurationComponent.getUserDefinedPortName(), configurationComponent);
         }
         return map;
-    }
-
-    public String getIpAddress() {
-        return this.ipAddress;
-    }
-
-    public String getPortNumber() {
-        return this.portNumber;
-    }
-
-    public String getUserName() {
-        return this.userName;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public BlockSet generateBlockSet() {
-        final BlockSet blockSet = new BlockSet();
-        this.configurationComponents.values().forEach(v -> {
-            final Instance instance = new Instance();
-            blockSet.getInstance().add(instance);
-            instance.getBlock().add(v.astToBlock());
-        });
-        return blockSet;
-    }
-
-    /**
-     * @return text which defines the brick configuration
-     */
-    public String generateText(String name) {
-        return "";
     }
 
     /**
@@ -191,12 +210,58 @@ public class ConfigurationAst {
     public static class Builder {
         private List<ConfigurationComponent> configurationComponents = new ArrayList<>();
 
-        private float wheelDiameter;
-        private float trackWidth;
-        private String ipAddress;
-        private String portNumber;
-        private String userName;
-        private String password;
+        private String robotType = "";
+        private String xmlVersion = "";
+        private String description = "";
+        private String tags = "";
+
+        private float wheelDiameter = 0.0f;
+        private float trackWidth = 0.0f;
+        private String ipAddress = "";
+        private String portNumber = "";
+        private String userName = "";
+        private String password = "";
+
+        public Builder setRobotType(String robotType) {
+            this.robotType = robotType;
+            return this;
+        }
+
+        public Builder setXmlVersion(String xmlVersion) {
+            this.xmlVersion = xmlVersion;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder setTags(String tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        /**
+         * Set the wheel diameter
+         *
+         * @param wheelDiameter in cm
+         */
+        public Builder setWheelDiameter(float wheelDiameter) {
+            this.wheelDiameter = wheelDiameter;
+            return this;
+        }
+
+        /**
+         * Set the track width
+         *
+         * @param trackWidth in cm
+         */
+
+        public Builder setTrackWidth(float trackWidth) {
+            this.trackWidth = trackWidth;
+            return this;
+        }
 
         public Builder setIpAddress(String ipAddress) {
             this.ipAddress = ipAddress;
@@ -221,51 +286,24 @@ public class ConfigurationAst {
         /**
          * Client must provide list of hardware components ({@link ConfigurationComponent})
          *
-         * @param sensors we want to connect to the brick configuration
-         * @return
+         * @param components we want to connect to the brick configuration
          */
         public Builder addComponents(List<ConfigurationComponent> components) {
             this.configurationComponents = components;
             return this;
         }
 
-        /**
-         * Set the wheel diameter
-         *
-         * @param wheelDiameter in cm
-         * @return
-         */
-        public Builder setWheelDiameter(float wheelDiameter) {
-            this.wheelDiameter = wheelDiameter;
-            return this;
-        }
-
-        /**
-         * Set the track width
-         *
-         * @param trackWidth in cm
-         * @return
-         */
-
-        public Builder setTrackWidth(float trackWidth) {
-            this.trackWidth = trackWidth;
-            return this;
-        }
-
         public ConfigurationAst build() {
-            ConfigurationAst configurationAst = new ConfigurationAst(this.configurationComponents, this.wheelDiameter, this.trackWidth);
-            configurationAst.ipAddress = this.ipAddress;
-            configurationAst.portNumber = this.portNumber;
-            configurationAst.userName = this.userName;
-            configurationAst.password = this.password;
-            return configurationAst;
+            return new ConfigurationAst(this.configurationComponents,
+                robotType, xmlVersion, description, tags, wheelDiameter, trackWidth, ipAddress, portNumber, userName, password);
         }
 
-        public <CC> CC build(Class<CC> clazz) {
+        public <C> C build(Class<C> configAstClass) {
             try {
-                return clazz.getConstructor(Collection.class).newInstance(this.configurationComponents);
+                return configAstClass.getDeclaredConstructor(Collection.class, String.class, String.class, String.class, String.class, Float.class, Float.class, String.class, String.class, String.class, String.class).newInstance(this.configurationComponents,
+                    robotType, xmlVersion, description, tags, wheelDiameter, trackWidth, ipAddress, portNumber, userName, password);
             } catch ( Exception e ) {
-                throw new DbcException("configuration class " + clazz.getSimpleName() + " has no constructor usable by the configuration builder", e);
+                throw new DbcException("configuration class " + configAstClass.getSimpleName() + " has no constructor usable by the configuration builder", e);
             }
         }
     }

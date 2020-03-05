@@ -22,17 +22,43 @@ public final class ConfigurationComponent extends Phrase<Void> {
     private final String userDefinedPortName;
     private final String portName;
     private final Map<String, String> componentProperties;
+    private final String x; // TODO should not be string
+    private final String y;
 
+    /**
+     * Should only be used by tests!
+     */
     public ConfigurationComponent(String componentType, boolean isActor, String portName, String userDefinedName, Map<String, String> componentProperties) {
-        super(
-            new BlockType(userDefinedName, Category.CONFIGURATION_BLOCK, ConfigurationComponent.class),
+        this(
+            componentType,
+            isActor,
+            portName,
+            userDefinedName,
+            componentProperties,
             BlocklyBlockProperties.make(componentType, "this-will-be-regenerated-anyway"),
-            BlocklyComment.make("empty-comment", false, "10", "10"));
+            BlocklyComment.make("empty-comment", false, "10", "10"),
+            "0",
+            "0");
+    }
+
+    public ConfigurationComponent(
+        String componentType,
+        boolean isActor,
+        String portName,
+        String userDefinedName,
+        Map<String, String> componentProperties,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        String x,
+        String y) {
+        super(new BlockType(userDefinedName, Category.CONFIGURATION_BLOCK, ConfigurationComponent.class), properties, comment);
         this.componentType = componentType;
         this.isActor = isActor;
         this.portName = portName;
         this.userDefinedPortName = userDefinedName;
         this.componentProperties = Collections.unmodifiableMap(new HashMap<>(componentProperties));
+        this.x = x;
+        this.y = y;
     }
 
     public String getComponentType() {
@@ -88,9 +114,15 @@ public final class ConfigurationComponent extends Phrase<Void> {
 
     public String getOptProperty(String propertyName) {
         Assert.nonEmptyString(propertyName, "No valid property name %s", propertyName);
-        String propertyValue = this.componentProperties.get(propertyName);
+        return this.componentProperties.get(propertyName);
+    }
 
-        return propertyValue;
+    public String getX() {
+        return this.x;
+    }
+
+    public String getY() {
+        return this.y;
     }
 
     @Override
@@ -117,10 +149,12 @@ public final class ConfigurationComponent extends Phrase<Void> {
     public Block astToBlock() {
         Block destination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, destination);
-        Ast2JaxbHelper.addField(destination, "NAME", this.userDefinedPortName);
-        this.componentProperties.forEach((k, v) -> {
-            Ast2JaxbHelper.addField(destination, k, v);
-        });
+        if (this.componentType.equals("WEDO")) {
+            Ast2JaxbHelper.addField(destination, "VAR", this.userDefinedPortName); // TODO why is this necessary?
+        } else {
+            Ast2JaxbHelper.addField(destination, "NAME", this.userDefinedPortName);
+        }
+        this.componentProperties.forEach((k, v) -> Ast2JaxbHelper.addField(destination, k, v));
         return destination;
     }
 

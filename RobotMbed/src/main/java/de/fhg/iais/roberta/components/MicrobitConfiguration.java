@@ -1,16 +1,13 @@
 package de.fhg.iais.roberta.components;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import de.fhg.iais.roberta.util.dbc.DbcException;
-
 public class MicrobitConfiguration extends ConfigurationAst {
-    private static final ConfigurationAst configuration;
+    private static List<ConfigurationComponent> components;
     static {
         ConfigurationComponent pin0 = new ConfigurationComponent("pin0", false, "0", "0", Collections.emptyMap());
         ConfigurationComponent pin1 = new ConfigurationComponent("pin1", false, "1", "1", Collections.emptyMap());
@@ -24,35 +21,21 @@ public class MicrobitConfiguration extends ConfigurationAst {
         ConfigurationComponent STRENGTH = new ConfigurationComponent("STRENGTH", false, "STRENGTH", "STRENGTH", Collections.emptyMap());
         ConfigurationComponent NO_PORT = new ConfigurationComponent("NO_PORT", false, "NO_PORT", "NO_PORT", Collections.emptyMap());
 
-        ArrayList<ConfigurationComponent> components = Lists.newArrayList(pin0, pin1, pin2, pin3, X, Y, Z, STRENGTH, NO_PORT);
-        configuration = new ConfigurationAst.Builder().addComponents(components).build();
+        components = Lists.newArrayList(pin0, pin1, pin2, pin3, X, Y, Z, STRENGTH, NO_PORT);
     }
 
-    private MicrobitConfiguration(Collection<ConfigurationComponent> configurationComponents, float wheelDiameterCM, float trackWidthCM) {
-        super(configurationComponents, wheelDiameterCM, trackWidthCM);
+    private MicrobitConfiguration(
+        Collection<ConfigurationComponent> configurationComponents,
+        String robottype,
+        String xmlversion,
+        String description,
+        String tags,
+        float wheelDiameter,
+        float trackWidth,
+        String ipAddress,
+        String portNumber,
+        String userName,
+        String password) {
+        super(components, robottype, xmlversion, description, tags, wheelDiameter, trackWidth, ipAddress, portNumber, userName, password);
     }
-
-    public static class Builder extends ConfigurationAst.Builder {
-
-        @Override
-        public Builder addComponents(List<ConfigurationComponent> components) {
-            throw new DbcException("Unsupported operation!");
-        }
-
-        @Override
-        public Builder setWheelDiameter(float wheelDiameter) {
-            throw new DbcException("Unsupported operation!");
-        }
-
-        @Override
-        public Builder setTrackWidth(float trackWidth) {
-            throw new DbcException("Unsupported operation!");
-        }
-
-        @Override
-        public ConfigurationAst build() {
-            return configuration;
-        }
-    }
-
 }

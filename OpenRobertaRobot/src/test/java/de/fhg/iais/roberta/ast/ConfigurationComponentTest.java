@@ -11,9 +11,10 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.visitor.collect.AbstractUsedHardwareCollectorVisitor;
 
-public class ConfigurationComponentTest {
+public class ConfigurationComponentTest extends AstTest {
 
     private class TestConfiguration extends AbstractUsedHardwareCollectorVisitor {
         //TODO create fake for this class
@@ -34,5 +35,16 @@ public class ConfigurationComponentTest {
         ConfigurationComponent cc = new ConfigurationComponent("type", false, "port", "userPort", Collections.emptyMap());
         Assert.isTrue(cc.getProperty().getBlockType().equals("type"));
         cc.accept(testConfiguration);
+    }
+
+    @Test
+    public void make_ByDefault_ReturnInstanceOfPlayNoteActionClass() throws Exception {
+        String expectedResult = "BlockAST [project=[[Location [x=163, y=62], MainTask [], PlayNoteAction [ duration=2000, frequency=261.626]]]]";
+        UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/newConfiguration/wedo_configuration.xml");
+    }
+
+    @Test
+    public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+        UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/newConfiguration/wedo_configuration.xml");
     }
 }
