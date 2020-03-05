@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.util.test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.custommonkey.xmlunit.Diff;
@@ -83,16 +82,16 @@ public class UnitTestHelper {
     }
 
     public static void checkProgramAstEquality(IRobotFactory factory, String expectedAst, String programBlocklyXmlFilename) {
-        String generatedAst = getAst(factory, programBlocklyXmlFilename).toString();
+        String generatedAst = getProgramAst(factory, programBlocklyXmlFilename).toString();
         generatedAst = "BlockAST [project=" + generatedAst + "]";
         Assert.assertEquals(expectedAst.replaceAll("\\s+", ""), generatedAst.replaceAll("\\s+", ""));
     }
 
     public static Phrase<Void> getAstOfFirstBlock(IRobotFactory factory, String programBlocklyXmlFilename) {
-        return getAst(factory, programBlocklyXmlFilename).get(0).get(1);
+        return getProgramAst(factory, programBlocklyXmlFilename).get(0).get(1);
     }
 
-    public static ArrayList<ArrayList<Phrase<Void>>> getAst(IRobotFactory factory, String programBlocklyXmlFilename) {
+    public static List<List<Phrase<Void>>> getProgramAst(IRobotFactory factory, String programBlocklyXmlFilename) {
         String programXml = Util.readResourceContent(programBlocklyXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);
         Project project = builder.build();
@@ -104,7 +103,7 @@ public class UnitTestHelper {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
         Jaxb2ProgramAst<V> transformer = new Jaxb2ProgramAst<>(factory);
         transformer.transform(project);
-        ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();
+        List<List<Phrase<V>>> tree = transformer.getTree();
         return tree.get(0).get(1);
     }
 
