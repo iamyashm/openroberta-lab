@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.transformer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -108,7 +109,7 @@ public final class Jaxb2ConfigurationAst {
         Block firstBlock = instance.getBlock().get(0);
         String componentType = factory.getConfigurationComponentTypeByBlocklyName(firstBlock.getType());
         String userDefinedName = firstBlock.getField().get(0).getValue();
-        Map<String, String> m = new HashMap<>();
+        Map<String, String> m = new LinkedHashMap<>();
         for ( int i = 1; i < firstBlock.getField().size(); i++ ) {
             m.put(firstBlock.getField().get(i).getName(), firstBlock.getField().get(i).getValue());
         }

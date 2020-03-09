@@ -84,7 +84,7 @@ public class UnitTestHelper {
         String annotatedProgramXml = project.getAnnotatedProgramAsXml();
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(programXml, annotatedProgramXml);
-        Assert.assertTrue(diff.identical());
+        Assert.assertTrue(diff.toString(), diff.identical());
     }
 
     public static void checkConfigReverseTransformation(IRobotFactory factory, String configBlocklyXmlFilename) throws SAXException, IOException {
@@ -94,7 +94,7 @@ public class UnitTestHelper {
         String annotatedConfigXml = project.getAnnotatedConfigurationAsXml();
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(configXml, annotatedConfigXml);
-        Assert.assertTrue(diff.identical());
+        Assert.assertTrue(diff.toString(), diff.identical());
     }
 
     public static void checkProgramAstEquality(IRobotFactory factory, String expectedAst, String programBlocklyXmlFilename) {

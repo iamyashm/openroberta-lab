@@ -256,7 +256,7 @@ public final class Project {
 
     private static BlockSet astToJaxb(ConfigurationAst config) {
         Assert.notNull(config);
-        HashMap<String, ConfigurationComponent> configurationComponents = config.getConfigurationComponents();
+        Map<String, ConfigurationComponent> configurationComponents = config.getConfigurationComponents();
         BlockSet blockSet = new BlockSet();
         blockSet.setRobottype(config.getRobotType());
         blockSet.setXmlversion(config.getXmlVersion());
@@ -378,9 +378,9 @@ public final class Project {
                 this.project.result = Key.COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND;
             } else {
                 try {
-                    BlockSet project = JaxbHelper.xml2BlockSet(this.programXml);
+                    BlockSet blockSet = JaxbHelper.xml2BlockSet(this.programXml);
                     Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(this.project.robotFactory);
-                    this.project.program = transformer.blocks2Ast(project);
+                    this.project.program = transformer.blocks2Ast(blockSet);
                 } catch ( Exception e ) {
                     LOG.error("Transformer failed", e);
                     this.project.result = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;

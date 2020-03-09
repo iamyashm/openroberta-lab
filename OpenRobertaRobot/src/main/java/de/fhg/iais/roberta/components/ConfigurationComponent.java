@@ -1,10 +1,12 @@
 package de.fhg.iais.roberta.components;
 
+import java.math.BigInteger;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -21,7 +23,7 @@ public final class ConfigurationComponent extends Phrase<Void> {
     private final boolean isActor;
     private final String userDefinedPortName;
     private final String portName;
-    private final Map<String, String> componentProperties;
+    private final LinkedHashMap<String, String> componentProperties;
     private final String x; // TODO should not be string
     private final String y;
 
@@ -56,7 +58,7 @@ public final class ConfigurationComponent extends Phrase<Void> {
         this.isActor = isActor;
         this.portName = portName;
         this.userDefinedPortName = userDefinedName;
-        this.componentProperties = Collections.unmodifiableMap(new HashMap<>(componentProperties));
+        this.componentProperties = new LinkedHashMap<>(componentProperties);
         this.x = x;
         this.y = y;
     }
@@ -101,7 +103,7 @@ public final class ConfigurationComponent extends Phrase<Void> {
     }
 
     public Map<String, String> getComponentProperties() {
-        return this.componentProperties;
+        return Collections.unmodifiableMap(this.componentProperties);
     }
 
     public String getProperty(String propertyName) {
@@ -150,7 +152,12 @@ public final class ConfigurationComponent extends Phrase<Void> {
         Block destination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, destination);
         if (this.componentType.equals("WEDO")) {
-            Ast2JaxbHelper.addField(destination, "VAR", this.userDefinedPortName); // TODO why is this necessary?
+            Ast2JaxbHelper.addField(destination, "VAR", this.userDefinedPortName); // TODO why is this necessary? change the way this works
+        } else if (this.componentType.equals("SENSEBOX")) {
+            Mutation mutation = new Mutation();
+            mutation.setItems(BigInteger.valueOf((this.componentProperties.size() / 2))); // TODO !!
+            destination.setMutation(mutation);
+            Ast2JaxbHelper.addField(destination, "BOX_ID", this.userDefinedPortName); // TODO !!
         } else {
             Ast2JaxbHelper.addField(destination, "NAME", this.userDefinedPortName);
         }
